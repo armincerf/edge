@@ -9,17 +9,17 @@ If you don't have a remote repository already (e.g. on GitHub), here's how to cr
 
 [source,shell]
 ----
-src$ mkdir acme
-src$ cd acme
-acme$ git init
+mkdir acme
+cd acme
+git init
 ----
 
 If you already have a repository, you can clone it like so:
 
 [source,shell]
 ----
-src$ git clone git@github.com:acme/acme.git
-src$ cd acme
+git clone git@github.com:acme/acme.git
+cd acme
 ----
 
 == Add Edge to your project
@@ -28,8 +28,8 @@ Once you have your repository, you can add Edge as a remote, and incorporate it 
 
 [source,shell]
 ----
-acme$ git remote add edge https://github.com/juxt/edge.git
-acme$ git pull --allow-unrelated-histories --no-rebase edge master
+git remote add edge https://github.com/armincerf/edge.git
+git pull --allow-unrelated-histories --no-rebase edge master
 ----
 
 == Add a remote later (optional)
@@ -41,8 +41,8 @@ For example, if you create a new repository on GitHub called `acme` under the or
 .Create a git remote
 [source,shell]
 ----
-acme$ git remote add origin git@github.com:acme/acme.git
-acme$ git push -u origin master
+git remote add origin git@github.com:acme/acme.git
+git push -u origin master
 ----
 
 == Create a new app
@@ -72,10 +72,10 @@ If you don't like the folder name, you can safely rename it (e.g. via `mv`) with
 
 [source,shell]
 ----
-edge$ ./bin/app acme/api
-edge$ ./bin/app acme/blog --sass
-edge$ ./bin/app acme/dashboard --cljs
-edge$ ./bin/app acme/radar --sass --cljs
+./bin/app acme/api
+./bin/app acme/blog --sass
+./bin/app acme/dashboard --cljs
+./bin/app acme/radar --sass --reframe
 ----
 
 == Next steps
@@ -87,7 +87,7 @@ edge$ ./bin/app acme/radar --sass --cljs
 ----
 The MIT License (MIT)
 
-Copyright © 2016-2019 JUXT LTD.
+Copyright © 2016-2020 JUXT LTD.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
