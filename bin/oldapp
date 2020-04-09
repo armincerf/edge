@@ -23,5 +23,5 @@ fi
 
 clojure -Sdeps '{:deps {seancorfield/clj-new {:mvn/version "0.7.6"}}}' \
   -m clj-new.create \
-  ./lib/edge-app-template2::edge-app-template \
+  ./lib/edge-app-template::edge-app-template \
   "${project_name:-edge/internal.help}" -- "$@"

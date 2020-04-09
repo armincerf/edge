@@ -1,0 +1,65 @@
+{:edge.kick/config
+ {:kick.builder/target #profile {:dev "target/dev"
+                                 :prod "target/prod"}{{#sass}}
+  :kick/sass {:builds [{:id "{{name}}"
+                        :source "{{name}}.scss"
+                        :target "public/{{name}}.css"}]}{{/sass}}{{#cljs}}
+  :kick/figwheel-main {:builds [{:id "app"
+                                 :main {{root-ns}}.frontend.main
+                                 :output-to "public/frontend.js"
+                                 :output-dir "public/frontend.out"
+                                 :asset-path "/frontend.out"
+                                 :optimizations #profile {:dev :none
+                                                          :prod :advanced}}]
+                       :figwheel-config
+                       {:ring-server-options
+                        {:port {{figwheel-port}}}}}{{/cljs}}}
+
+ :{{root-ns}}.api/origin "http://localhost:{{server-port}}"
+
+ :ig.system/base
+ {;; Webserver
+  :{{root-ns}}.api/aleph
+  {:port {{server-port}}
+   :handler #ig/ref :{{root-ns}}.api/ring}
+  :{{root-ns}}.api/ring {:router #ig/ref :{{root-ns}}.api/router
+                         :error-registry #ig/ref :{{root-ns}}.api/error-registry
+                         :resource-root "public"}
+  ;; Routing
+  :{{root-ns}}.api.routes/routes {:middleware [:parameters
+                                               :format-negotiate
+                                               :format-response
+                                               [:{{root-ns}}-errors #ig/ref :{{root-ns}}.api/error-registry]
+                                               :format-request
+                                               :snake-case-response
+                                               :coerce-response
+                                               :coerce-request
+                                               :properties
+                                               :deferred]
+                                  :components {:system #ig/ref :juxt.crux.ig/system
+                                               :error-registry #ig/ref :{{root-ns}}.api/error-registry
+                                               :origin #ref [:{{root-ns}}.api/origin]}}
+  :{{root-ns}}.api/router {:request-diffs :debug
+                           :pretty-router-exceptions? true
+                           :routes [#ig/ref :{{root-ns}}.api.routes/routes
+                                    #ig/ref :{{root-ns}}.api/swagger]}
+  :{{root-ns}}.api/swagger {:middleware [:parameters
+                                         :format-negotiate
+                                         :format-response
+                                         [:{{root-ns}}-errors #ig/ref :{{root-ns}}.api/error-registry]
+                                         :format-request
+                                         :coerce-response
+                                         :coerce-request
+                                         :deferred]}
+  ;; errors.edn contains a mapping of error codes to human readable strings
+  :{{root-ns}}.api/error-registry {:registry-resource "errors.edn"}
+
+  ;; Database
+  :juxt.crux.ig/system {:crux.node/topology [crux.standalone/topology]}}
+
+ :ig.system/dev
+ {:edge.kick/builder #ref [:edge.kick/config]}
+
+ :ig/system #profile {:dev #merge [#ref [:ig.system/base]
+                                   #ref [:ig.system/dev]]
+                      :default #ref [:ig.system/base]}}
