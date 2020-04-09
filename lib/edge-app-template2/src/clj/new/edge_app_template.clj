@@ -167,9 +167,14 @@
                   (when reframe?
                     (for [file reframe-files]
                       [(str "src/{{sanitized}}/frontend/" file ".cljs")
-                       (render "reframe/" (str file ".cljs") data)]))
+                       (render (str "reframe/" file ".cljs") data)]))
                   [["deps.edn" (render "deps.edn" data)]
+                   ["tests.edn" (render "tests.edn" data)]
+                   ["test/{{sanitized}}/fixtures.clj" (render "test/fixtures.clj" data)]
+                   [(str "test/" (multi-segment (sanitize-ns name)) "-test.clj")
+                    (render "test/test.clj" data)]
                    ["src/config.edn" (render "config.edn" data)]
+                   ["src/errors.edn" (render "errors.edn" data)]
                    ["dev/dev.clj" (render "dev.clj" data)]
                    ["dev/log_dev_app.properties" (render "log_dev_app.properties" data)]
                    [".dir-locals.el" (render "dir-locals.el" data)]

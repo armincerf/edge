@@ -1,0 +1,3 @@
+#kaocha/v1 {:plugins [:thanks.kaocha/orchestra
+                      :thanks.kaocha/require-ns]
+            :thanks.kaocha.require-ns/ns-names [{{root-ns}}.api.spec]}
